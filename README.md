@@ -1,3 +1,6 @@
-# umlaut
+# diacritic
 
-![Schematic of the layout of the project](readme_docs/Layout.png?raw=true "Project Layout")
+![Schematic of the layout of the project.](readme_docs/diacritic_layout.png?raw=true "Project Layout")
+
+## umlaut
+### Scraper
