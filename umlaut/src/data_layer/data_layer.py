@@ -6,8 +6,9 @@ from abc import ABC, abstractmethod
 class DataLayer(ABC):
 
     # NOTE don't know if I can constrain the object type more
+    @staticmethod
     @abstractmethod
-    def save(self, data_layer_identifier: str, data: object):
+    def save(data_layer_identifier: str, data: object):
         pass
 
     # def load(self, data_layer_identifier: str):

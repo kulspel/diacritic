@@ -5,7 +5,8 @@ from data_layer.data_layer import DataLayer
 
 class LocalFileSystem(DataLayer):
     # NOTE should one get some return value after a (non)succesfull save?
-    def save(self, data_layer_identifier: str, data: object) -> None:
+    @staticmethod
+    def save(data_layer_identifier: str, data: object) -> None:
         # FIXME the file ending probably shouldnt be hardcoded
         # HACK dont really like that we take no consideration of where the script is run from
         path = "data/%s.json" % ('/'.join(data_layer_identifier.split("::")))
