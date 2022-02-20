@@ -23,17 +23,20 @@ class DataLayerIdService(IdService[ParentIdentifier]):
     data_layer: DataLayer
 
     def get_id(self, class_identifier: ParentIdentifier) -> Id:
+        # HACK the id_counter in the metadata file is 1000% not atomic, not sure how to fix right now
+
         metadata = self.data_layer.load_metadata(
             class_identifier.get_parent_identifier())
 
-        if metadata:
-            id_counter = metadata["id_service"]["id_counter"]
-            self.data_layer.save_metadata(class_identifier.get_parent_identifier(), {
-                                          "id_service": {"id_counter": id_counter+1}})
+        if metadata and 'id_service' in metadata:
+            id_counter = metadata['id_service']['id_counter']
+            self.data_layer.update_metadata(class_identifier.get_parent_identifier(), {
+                "id_service": {"id_counter": id_counter+1}})
             return id_counter
         else:
+            # NOTE This might be redundant, with the defaults of Metadata.py
             id_counter = 1
-            self.data_layer.save_metadata(class_identifier.get_parent_identifier(), {
-                                          "id_service": {"id_counter": id_counter}})
+            self.data_layer.update_metadata(class_identifier.get_parent_identifier(), {
+                "id_service": {"id_counter": id_counter}})
 
             return id_counter

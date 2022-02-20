@@ -41,7 +41,7 @@ class LocalFileSystem(DataLayer):
                 file.write(data_to_save)
         else:
             print("data_to_save was never set")
-            print(data)
+            print(data)  # type: ignore
             print(file_extension)
             raise NotImplementedError
 
@@ -71,5 +71,14 @@ class LocalFileSystem(DataLayer):
         return metadata
 
     @staticmethod
-    def save_metadata(data_layer_identifier: DataLayerIdentifier, data: Metadata) -> None:
-        return LocalFileSystem.save(data_layer_identifier + "::METADATA", data)
+    def update_metadata(data_layer_identifier: DataLayerIdentifier, update: Metadata) -> None:
+        old_metadata: Metadata = LocalFileSystem.load(
+            data_layer_identifier + "::METADATA")
+        new_metadata = None
+
+        if old_metadata:
+            new_metadata = old_metadata | update
+        else:
+            new_metadata = update
+
+        return LocalFileSystem.save(data_layer_identifier + "::METADATA", new_metadata)

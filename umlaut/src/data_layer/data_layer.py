@@ -11,6 +11,7 @@ DataLayerIdentifier = str
 
 
 def toDataLayerIdentifier(strings: list[str]) -> DataLayerIdentifier:
+    print(strings, "::".join(map(lambda x: x.upper(), strings)))
     return "::".join(map(lambda x: x.upper(), strings))
 
 
@@ -36,5 +37,5 @@ class DataLayer(ABC):
     @ staticmethod
     @ abstractmethod
     # Here we could be cool and type the metadata
-    def save_metadata(data_layer_identifier: DataLayerIdentifier, data: Metadata) -> None:
+    def update_metadata(data_layer_identifier: DataLayerIdentifier, update: Metadata) -> None:
         raise NotImplementedError

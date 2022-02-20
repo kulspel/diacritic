@@ -18,9 +18,7 @@ class OnDeviceScrapeRunner(ScrapeRunner[ParentIdentifier]):
     def start_scrape(data_layer: DataLayer, id_service: IdService[ParentIdentifier], config: Config):
         scrape_type = config['scrape_config']["scrape_type"]
         if ScrapeType[scrape_type] == ScrapeType.SQUID_SCRAPE:
-            SquidScraper.run_scrape(
-                id_service=id_service,
-                data_layer=data_layer,
+            SquidScraper(id_service=id_service, data_layer=data_layer).run_scrape(
                 # HACK casting like this probably super unsafe
                 scrape_config=cast(SquidScrapeConfig, config['scrape_config'])
             )

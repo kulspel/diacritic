@@ -25,9 +25,21 @@ class ScrapeParentIdentifier(ParentIdentifier):
 @dataclass(frozen=True)
 class Scraper(ABC, Generic[Config]):
     parent_identifier = ScrapeParentIdentifier()
-    # id: Id
+    id_service: IdService[ParentIdentifier]
+    data_layer: DataLayer
+    scrape_id: Id = None  # type: ignore
+    identifier: DataLayerIdentifier = None  # type: ignore
+    # HACK can we remove this lint suppression?
 
-    @classmethod
+    def __post_init__(self):
+        if not self.scrape_id:
+            object.__setattr__(self, 'scrape_id', self.id_service.get_id(
+                class_identifier=self.parent_identifier))
+        # if not self.identifier:
+
+        # # NOTE are we coupling our code really bad right now?
+        # self.data_layer.update_metadata()
+
     @abstractmethod
-    def run_scrape(cls, id_service: IdService[ParentIdentifier], data_layer: DataLayer, scrape_config: Config) -> Id:
+    def run_scrape(self, scrape_config: Config) -> Id:
         raise NotImplementedError
