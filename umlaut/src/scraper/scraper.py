@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from datetime import datetime
+from dataclasses import dataclass, field
 from typing import Generic, TypeVar
 
-from data_layer.data_layer import DataLayer, DataLayerIdentifier, toDataLayerIdentifier
+import requests
+from bs4 import BeautifulSoup
+from data_layer.data_layer import (DataLayer, DataLayerIdentifier,
+                                   toDataLayerIdentifier)
 from id_service.id_service import Id, IdService
 from scrape_config.scrape_config import ScrapeConfig
 
@@ -14,47 +16,53 @@ from scrape_config.scrape_config import ScrapeConfig
 Config = TypeVar('Config', bound='ScrapeConfig')
 
 
-# class ScrapeParentIdentifier(ParentIdentifier):
-#     # HACK aren't we super duper coupling our shit with this ParentIdentifier composition design pattern? We are kinda coupling all of our classes to a specific implementation of idService, or is it reasonable to assume that all implementations of IdService would need some ParentIdentifier?
-
-#     @staticmethod
-#     def get_parent_identifier() -> DataLayerIdentifier:
-#         return 'SCRAPES'
-
-
 @dataclass(frozen=True)
 class Scraper(ABC, Generic[Config]):
     parent_identifier = 'SCRAPES'
     id_service: IdService
     data_layer: DataLayer
     scrape_config: Config
-    scrape_id: Id = None  # type: ignore
-    identifier: DataLayerIdentifier = None  # type: ignore
+    scrape_id: Id = field(init=False)
+    identifier: DataLayerIdentifier = field(init=False)
     # HACK can we remove this lint suppression?
 
     def __post_init__(self):
-        if not self.scrape_id:
-            object.__setattr__(
-                self,
-                'scrape_id',
-                self.id_service.get_id(class_identifier=self.parent_identifier)
+
+        object.__setattr__(
+            self,
+            'scrape_id',
+            self.id_service.get_id(class_identifier=self.parent_identifier)
+        )
+
+        object.__setattr__(
+            self,
+            'identifier',
+            toDataLayerIdentifier(
+                [
+                    self.parent_identifier,
+                    str(self.scrape_id)
+                ]
             )
-        if not self.identifier:
-            object.__setattr__(
-                self,
-                'identifier',
-                toDataLayerIdentifier(
-                    [
-                        self.parent_identifier,
-                        str(self.scrape_id)
-                    ]
-                )
-            )
+        )
 
         # NOTE are we coupling our code really bad right now?
+        # "start_time": datetime.now().isoformat(),
         self.data_layer.update_metadata(
-            self.identifier, {"start_time": datetime.now().isoformat(), "scrape_config": self.scrape_config})
+            self.identifier, {"scrape_config": self.scrape_config})
 
-    @abstractmethod
+    @ abstractmethod
     def run_scrape(self) -> Id:
         raise NotImplementedError
+
+    # NOTE Perhaps abstract away the info that we're doing it via BeatifulSoup?
+    def scrape_page(self, url: str) -> BeautifulSoup:
+        page = requests.get(url)
+        html_content = page.text
+        soup = BeautifulSoup(html_content, 'html.parser')
+
+        return soup
+
+        # TODO or perhaps just be able to create a scrape from a partially completed one.
+        # @ abstractmethod
+        # def resume_scrape(self, scrape_id :Id) -> Id:
+        #     raise NotImplementedError

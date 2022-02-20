@@ -8,7 +8,10 @@ class IdServiceMetadata(TypedDict):
     id_counter: int
 
 
-class Metadata(TypedDict, total=False):
-    start_time: str  # NOTE Would be nice to have this as datetime, but datetime isnt json serializable, a problem for the future, for now, just don'ät put any weird strings in here, should be settable by setting some jsonencoder
+class ScrapeMetada(TypedDict, total=False):
+    # NOTE are times even needed?
+    # start_time: str  # NOTE Would be nice to have this as datetime, but datetime isnt json serializable, a problem for the future, for now, just don'ät put any weird strings in here, should be settable by setting some jsonencoder
+    # end_time:str
+    url: str
     id_service: IdServiceMetadata
     scrape_config: ScrapeConfig

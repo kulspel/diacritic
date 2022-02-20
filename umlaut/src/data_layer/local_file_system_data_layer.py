@@ -6,7 +6,7 @@ from typing import Any
 from bs4 import BeautifulSoup
 
 from data_layer.data_layer import DataLayer, DataLayerIdentifier
-from data_layer.metadata import Metadata
+from data_layer.metadata import ScrapeMetada
 
 
 class LocalFileSystem(DataLayer):
@@ -65,14 +65,14 @@ class LocalFileSystem(DataLayer):
             return None
 
     @staticmethod
-    def load_metadata(data_layer_identifier: DataLayerIdentifier) -> Metadata:
-        metadata: Metadata = LocalFileSystem.load(
+    def load_metadata(data_layer_identifier: DataLayerIdentifier) -> ScrapeMetada:
+        metadata: ScrapeMetada = LocalFileSystem.load(
             data_layer_identifier + "::METADATA")  # HACK THis is horrible, the load method returns Any and there's no static checking that this is sane
         return metadata
 
     @staticmethod
-    def update_metadata(data_layer_identifier: DataLayerIdentifier, update: Metadata) -> None:
-        old_metadata: Metadata = LocalFileSystem.load(
+    def update_metadata(data_layer_identifier: DataLayerIdentifier, update: ScrapeMetada) -> None:
+        old_metadata: ScrapeMetada = LocalFileSystem.load(
             data_layer_identifier + "::METADATA")
         new_metadata = None
 

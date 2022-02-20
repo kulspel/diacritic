@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from data_layer.data_layer import DataLayer
+from data_layer.data_layer import DataLayer, DataLayerIdentifier
 
 from id_service.id_service import Id, IdService
 
@@ -11,7 +11,7 @@ from id_service.id_service import Id, IdService
 class DataLayerIdService(IdService):
     data_layer: DataLayer
 
-    def get_id(self, class_identifier: str) -> Id:
+    def get_id(self, class_identifier: DataLayerIdentifier) -> Id:
         # HACK the id_counter in the metadata file is 1000% not atomic, not sure how to fix right now
 
         metadata = self.data_layer.load_metadata(class_identifier)

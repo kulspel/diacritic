@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any
 
-from data_layer.metadata import Metadata
+from data_layer.metadata import ScrapeMetada
 
 # TODO This one needs to be abstracted to it's own package separate from the scraper, since it will be needed in several places
 
@@ -14,8 +14,8 @@ def toDataLayerIdentifier(strings: list[str]) -> DataLayerIdentifier:
     return "::".join(map(lambda x: x.upper(), strings))
 
 
-def appendDataLayerIdentifier(identifier: DataLayerIdentifier, addition: str) -> DataLayerIdentifier:
-    return "::".join([identifier, addition])
+def appendDataLayerIdentifier(identifier: DataLayerIdentifier, *args: str) -> DataLayerIdentifier:
+    return "::".join([identifier] + list(args))
 
 
 @ dataclass(frozen=True)
@@ -34,11 +34,11 @@ class DataLayer(ABC):
 
     @ staticmethod
     @ abstractmethod
-    def load_metadata(data_layer_identifier: DataLayerIdentifier) -> Metadata:
+    def load_metadata(data_layer_identifier: DataLayerIdentifier) -> ScrapeMetada:
         raise NotImplementedError
 
     @ staticmethod
     @ abstractmethod
     # Here we could be cool and type the metadata
-    def update_metadata(data_layer_identifier: DataLayerIdentifier, update: Metadata) -> None:
+    def update_metadata(data_layer_identifier: DataLayerIdentifier, update: ScrapeMetada) -> None:
         raise NotImplementedError

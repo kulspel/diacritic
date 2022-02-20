@@ -23,10 +23,12 @@ class ScrapeConfig(TypedDict):
     # TODO Make this nullable? Don't even know if that's a thing in Python
     scrape_type: str
     # NOTE Would want this one to be ScrapeType but ran into issues when comparing this value to ScrapeType enum
+    base_url: str
 
 
 class SquidScrapeConfig(ScrapeConfig):
-    origin_url: str
+    origin_page: str
+    sub_page_class: str
 
 
 class Config(TypedDict):
