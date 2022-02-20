@@ -25,9 +25,6 @@ class OnDeviceScrapeRunner(ScrapeRunner[ParentIdentifier]):
                 scrape_config=cast(SquidScrapeConfig, config['scrape_config'])
             )
 
-        data_layer.save(data_layer_identifier="hello::world",
-                        data={"hello2": "world"})
-
         return 1
 
 

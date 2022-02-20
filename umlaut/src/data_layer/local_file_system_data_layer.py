@@ -3,6 +3,8 @@ import json
 import os
 from typing import Any
 
+from bs4 import BeautifulSoup
+
 from data_layer.data_layer import DataLayer, DataLayerIdentifier
 from data_layer.metadata import Metadata
 
@@ -12,9 +14,15 @@ class LocalFileSystem(DataLayer):
     @staticmethod
     def save(data_layer_identifier: DataLayerIdentifier, data: Any) -> None:
         file_extension = ""
+        data_to_save = None
 
-        if isinstance(data, object):
+        if isinstance(data, dict):
             file_extension = ".json"
+            data_to_save = json.dumps(data)  # NOTE we could prettify the data
+        elif isinstance(data, BeautifulSoup):
+            # TODO abstract away the knowledge of what scraping lib we're using
+            file_extension = ".html"
+            data_to_save = str(data)  # NOTE we could prettify the data
         else:
             print("Unknown format")
             print(data)
@@ -28,8 +36,14 @@ class LocalFileSystem(DataLayer):
         os.makedirs(os.path.dirname(path), exist_ok=True)
 
         # FIXME handle collisions in identifier, right now it will just overwrite
-        with open(path, 'w') as file:
-            file.write(json.dumps(data))
+        if data_to_save:
+            with open(path, 'w') as file:
+                file.write(data_to_save)
+        else:
+            print("data_to_save was never set")
+            print(data)
+            print(file_extension)
+            raise NotImplementedError
 
     @staticmethod
     def load(data_layer_identifier: DataLayerIdentifier) -> Any:

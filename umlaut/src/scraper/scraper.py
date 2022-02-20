@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import Generic, TypeVar
 
 from data_layer.data_layer import DataLayer, DataLayerIdentifier
-from id_service.id_service import IdService
+from id_service.id_service import Id, IdService
 from scrape_config.scrape_config import ScrapeConfig
 from id_service.data_layer_id_service import ParentIdentifier
 
@@ -29,5 +29,5 @@ class Scraper(ABC, Generic[Config]):
 
     @classmethod
     @abstractmethod
-    def run_scrape(cls, id_service: IdService[ParentIdentifier], data_layer: DataLayer, scrape_config: Config) -> None:
+    def run_scrape(cls, id_service: IdService[ParentIdentifier], data_layer: DataLayer, scrape_config: Config) -> Id:
         raise NotImplementedError

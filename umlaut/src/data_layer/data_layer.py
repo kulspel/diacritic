@@ -10,27 +10,31 @@ from data_layer.metadata import Metadata
 DataLayerIdentifier = str
 
 
-@dataclass(frozen=True)
+def toDataLayerIdentifier(strings: list[str]) -> DataLayerIdentifier:
+    return "::".join(map(lambda x: x.upper(), strings))
+
+
+@ dataclass(frozen=True)
 class DataLayer(ABC):
 
     # NOTE don't know if I can constrain the object type more
-    @staticmethod
-    @abstractmethod
+    @ staticmethod
+    @ abstractmethod
     def save(data_layer_identifier: DataLayerIdentifier, data: Any) -> None:
         raise NotImplementedError
 
-    @staticmethod
-    @abstractmethod
+    @ staticmethod
+    @ abstractmethod
     def load(data_layer_identifier: DataLayerIdentifier) -> Any:
         raise NotImplementedError
 
-    @staticmethod
-    @abstractmethod
+    @ staticmethod
+    @ abstractmethod
     def load_metadata(data_layer_identifier: DataLayerIdentifier) -> Metadata:
         raise NotImplementedError
 
-    @staticmethod
-    @abstractmethod
+    @ staticmethod
+    @ abstractmethod
     # Here we could be cool and type the metadata
     def save_metadata(data_layer_identifier: DataLayerIdentifier, data: Metadata) -> None:
         raise NotImplementedError
