@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from typing import Any
+
+from data_layer.metadata import Metadata
 
 # TODO This one needs to be abstracted to it's own package separate from the scraper, since it will be needed in several places
 
@@ -13,8 +16,21 @@ class DataLayer(ABC):
     # NOTE don't know if I can constrain the object type more
     @staticmethod
     @abstractmethod
-    def save(data_layer_identifier: DataLayerIdentifier, data: object) -> None:
+    def save(data_layer_identifier: DataLayerIdentifier, data: Any) -> None:
         raise NotImplementedError
 
-    # def load(self, data_layer_identifier: str):
-    #    raise NotImplementedError
+    @staticmethod
+    @abstractmethod
+    def load(data_layer_identifier: DataLayerIdentifier) -> Any:
+        raise NotImplementedError
+
+    @staticmethod
+    @abstractmethod
+    def load_metadata(data_layer_identifier: DataLayerIdentifier) -> Metadata:
+        raise NotImplementedError
+
+    @staticmethod
+    @abstractmethod
+    # Here we could be cool and type the metadata
+    def save_metadata(data_layer_identifier: DataLayerIdentifier, data: Metadata) -> None:
+        raise NotImplementedError

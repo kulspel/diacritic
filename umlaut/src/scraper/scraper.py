@@ -19,15 +19,15 @@ class ScrapeParentIdentifier(ParentIdentifier):
 
     @staticmethod
     def get_parent_identifier() -> DataLayerIdentifier:
-        return 'scrapes'
+        return 'SCRAPES'
 
 
 @dataclass(frozen=True)
 class Scraper(ABC, Generic[Config]):
-    parent_identifier = ScrapeParentIdentifier
+    parent_identifier = ScrapeParentIdentifier()
     # id: Id
 
     @classmethod
     @abstractmethod
-    def run_scrape(cls, id_service: IdService, data_layer: DataLayer, scrape_config: Config) -> None:
+    def run_scrape(cls, id_service: IdService[ParentIdentifier], data_layer: DataLayer, scrape_config: Config) -> None:
         raise NotImplementedError

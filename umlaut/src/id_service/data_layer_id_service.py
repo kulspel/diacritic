@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any
 
 from data_layer.data_layer import DataLayer, DataLayerIdentifier
 
@@ -20,8 +19,21 @@ class ParentIdentifier(ABC):
 
 
 @dataclass(frozen=True)
-class DataLayerIdService(IdService):
+class DataLayerIdService(IdService[ParentIdentifier]):
     data_layer: DataLayer
 
-    def getId(self, obj: Any) -> Id:
-        return 1
+    def get_id(self, class_identifier: ParentIdentifier) -> Id:
+        metadata = self.data_layer.load_metadata(
+            class_identifier.get_parent_identifier())
+
+        if metadata:
+            id_counter = metadata["id_service"]["id_counter"]
+            self.data_layer.save_metadata(class_identifier.get_parent_identifier(), {
+                                          "id_service": {"id_counter": id_counter+1}})
+            return id_counter
+        else:
+            id_counter = 1
+            self.data_layer.save_metadata(class_identifier.get_parent_identifier(), {
+                                          "id_service": {"id_counter": id_counter}})
+
+            return id_counter
