@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Generic, TypeVar
 
-from data_layer.data_layer import DataLayer, DataLayerIdentifier
+from data_layer.data_layer import DataLayer, DataLayerIdentifier, toDataLayerIdentifier
 from id_service.id_service import Id, IdService
 from scrape_config.scrape_config import ScrapeConfig
-from id_service.data_layer_id_service import ParentIdentifier
 
 # HACK the only reason these imports  work is because we run scrape_runner.py which I guess brings these packages into scope somehow
 
@@ -14,32 +14,47 @@ from id_service.data_layer_id_service import ParentIdentifier
 Config = TypeVar('Config', bound='ScrapeConfig')
 
 
-class ScrapeParentIdentifier(ParentIdentifier):
-    # HACK aren't we super duper coupling our shit with this ParentIdentifier composition design pattern? We are kinda coupling all of our classes to a specific implementation of idService, or is it reasonable to assume that all implementations of IdService would need some ParentIdentifier?
+# class ScrapeParentIdentifier(ParentIdentifier):
+#     # HACK aren't we super duper coupling our shit with this ParentIdentifier composition design pattern? We are kinda coupling all of our classes to a specific implementation of idService, or is it reasonable to assume that all implementations of IdService would need some ParentIdentifier?
 
-    @staticmethod
-    def get_parent_identifier() -> DataLayerIdentifier:
-        return 'SCRAPES'
+#     @staticmethod
+#     def get_parent_identifier() -> DataLayerIdentifier:
+#         return 'SCRAPES'
 
 
 @dataclass(frozen=True)
 class Scraper(ABC, Generic[Config]):
-    parent_identifier = ScrapeParentIdentifier()
-    id_service: IdService[ParentIdentifier]
+    parent_identifier = 'SCRAPES'
+    id_service: IdService
     data_layer: DataLayer
+    scrape_config: Config
     scrape_id: Id = None  # type: ignore
     identifier: DataLayerIdentifier = None  # type: ignore
     # HACK can we remove this lint suppression?
 
     def __post_init__(self):
         if not self.scrape_id:
-            object.__setattr__(self, 'scrape_id', self.id_service.get_id(
-                class_identifier=self.parent_identifier))
-        # if not self.identifier:
+            object.__setattr__(
+                self,
+                'scrape_id',
+                self.id_service.get_id(class_identifier=self.parent_identifier)
+            )
+        if not self.identifier:
+            object.__setattr__(
+                self,
+                'identifier',
+                toDataLayerIdentifier(
+                    [
+                        self.parent_identifier,
+                        str(self.scrape_id)
+                    ]
+                )
+            )
 
-        # # NOTE are we coupling our code really bad right now?
-        # self.data_layer.update_metadata()
+        # NOTE are we coupling our code really bad right now?
+        self.data_layer.update_metadata(
+            self.identifier, {"start_time": datetime.now().isoformat(), "scrape_config": self.scrape_config})
 
     @abstractmethod
-    def run_scrape(self, scrape_config: Config) -> Id:
+    def run_scrape(self) -> Id:
         raise NotImplementedError

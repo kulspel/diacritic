@@ -11,8 +11,11 @@ DataLayerIdentifier = str
 
 
 def toDataLayerIdentifier(strings: list[str]) -> DataLayerIdentifier:
-    print(strings, "::".join(map(lambda x: x.upper(), strings)))
     return "::".join(map(lambda x: x.upper(), strings))
+
+
+def appendDataLayerIdentifier(identifier: DataLayerIdentifier, addition: str) -> DataLayerIdentifier:
+    return "::".join([identifier, addition])
 
 
 @ dataclass(frozen=True)
