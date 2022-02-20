@@ -12,4 +12,4 @@ class ScrapeRunner(ABC):
     @staticmethod
     @abstractmethod
     def start_scrape(data_layer: DataLayer, id_service: IdService, config: Config) -> int:
-        pass
+        raise NotImplementedError

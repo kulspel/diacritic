@@ -1,13 +1,14 @@
 import argparse
 import json
 from typing import cast
+
 from data_layer.data_layer import DataLayer
 from data_layer.local_file_system_data_layer import LocalFileSystem
+from id_service.data_layer_id_service import DataLayerIdService
+from id_service.id_service import IdService
 from scrape_config.scrape_config import Config, ScrapeType, SquidScrapeConfig
 from scrape_runner import ScrapeRunner
 from scraper.squid_scraper import SquidScraper
-from id_service.data_layer_id_service import DataLayerIdService
-from id_service.id_service import IdService
 
 
 class OnDeviceScrapeRunner(ScrapeRunner):
@@ -17,7 +18,6 @@ class OnDeviceScrapeRunner(ScrapeRunner):
     def start_scrape(data_layer: DataLayer, id_service: IdService, config: Config):
         scrape_type = config['scrape_config']["scrape_type"]
         if ScrapeType[scrape_type] == ScrapeType.SQUID_SCRAPE:
-
             SquidScraper.run_scrape(
                 id_service=id_service,
                 data_layer=data_layer,
