@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 # TODO This one needs to be abstracted to it's own package separate from the scraper, since it will be needed in several places
+# NOTE Will it though?
 
 
 Id = int

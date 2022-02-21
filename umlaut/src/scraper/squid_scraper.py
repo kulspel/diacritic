@@ -15,8 +15,10 @@ class SquidScraper(Scraper[SquidScrapeConfig]):
     def run_scrape(self) -> Id:
         origin_page_url = self.scrape_config['base_url'] + \
             self.scrape_config['origin_page']
-        self.data_layer.update_metadata(
-            self.identifier, {"url": origin_page_url})
+        self.data_layer.update_scrape_metadata(
+            self.identifier,
+            {"url": origin_page_url}
+        )
 
         origin_page = self.scrape_page(origin_page_url)
 
@@ -37,7 +39,9 @@ class SquidScraper(Scraper[SquidScrapeConfig]):
             tag['href']
             for tag in sub_page_link_elements
             if isinstance(tag, Tag)
-        ]
+        ][:10]  # FIXME when you want to get all the data
+
+        # TODO Save the extracted sub pages to the metadata
 
         # TODO see which ones are not Tags
 
@@ -48,10 +52,12 @@ class SquidScraper(Scraper[SquidScrapeConfig]):
         ]
 
         # TODO see which ones are not strs
-        # FIXME looking at the output it looks like we get 2 sub page scrapes with the same ids, which is kinda bad since we won't handle collisions cracefully
+        # FIXME looking at the output it looks like we get 2 sub page scrapes with the same ids, which is kinda bad since we won't handle collisions cracefully. High priority fix
         print(sub_page_scrape_ids)
 
         # TODO implement how to go to the "next page" and continue scraping
+        # TODO Implement multithreading?
+        # TODO think about abstractions between this and Scraper
 
         return self.scrape_id
 
@@ -63,7 +69,7 @@ class SquidScraper(Scraper[SquidScrapeConfig]):
 
         sub_page_url = self.scrape_config['base_url'] + sub_page_url_addition
 
-        self.data_layer.update_metadata(
+        self.data_layer.update_scrape_metadata(
             appendDataLayerIdentifier(
                 self.identifier,
                 str(sub_scrape_id)

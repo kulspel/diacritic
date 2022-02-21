@@ -16,13 +16,12 @@ class ScrapeType(Enum):
 class ScrapeConfig(TypedDict):
     # NOTE how to solve the whole ID issue, the configs basically needs to be persisted and controlled by the DataLayer
     id: int
-    # NOTE version is in a similar situation to id but maybe not as bad
+    # NOTE version is in a similar situation to id but maybe not as bad, mostly that it's pretty stupid to have it here with the current state of the project (it's not used)
     version: str
     name: str
     description: str
-    # TODO Make this nullable? Don't even know if that's a thing in Python
     scrape_type: str
-    # NOTE Would want this one to be ScrapeType but ran into issues when comparing this value to ScrapeType enum
+    # FIXME Would want this one to be ScrapeType but ran into issues when comparing this value to ScrapeType enum
     base_url: str
 
 

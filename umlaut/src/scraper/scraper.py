@@ -47,7 +47,7 @@ class Scraper(ABC, Generic[Config]):
 
         # NOTE are we coupling our code really bad right now?
         # "start_time": datetime.now().isoformat(),
-        self.data_layer.update_metadata(
+        self.data_layer.update_scrape_metadata(
             self.identifier, {"scrape_config": self.scrape_config})
 
     @ abstractmethod
