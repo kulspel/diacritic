@@ -55,7 +55,7 @@ class Scraper(ABC, Generic[Config]):
         raise NotImplementedError
 
     # NOTE Perhaps abstract away the info that we're doing it via BeatifulSoup?
-    def scrape_page(self, url: str) -> BeautifulSoup:
+    def scrape_url(self, url: str) -> BeautifulSoup:
         page = requests.get(url)
         html_content = page.text
         soup = BeautifulSoup(html_content, 'html.parser')

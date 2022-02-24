@@ -4,6 +4,7 @@ import os
 from typing import Any
 
 from bs4 import BeautifulSoup
+from mergedeep import merge  # type: ignore
 
 from data_layer.data_layer import DataLayer, DataLayerIdentifier
 from data_layer.metadata import Metadata, ScrapeMetadata
@@ -77,7 +78,7 @@ class LocalFileSystem(DataLayer):
         new_metadata = None
 
         if old_metadata:
-            new_metadata = old_metadata | update
+            new_metadata = merge({}, old_metadata, update)  # type: ignore
         else:
             new_metadata = update
 

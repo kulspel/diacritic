@@ -28,6 +28,7 @@ class ScrapeConfig(TypedDict):
 class SquidScrapeConfig(ScrapeConfig):
     origin_page: str
     sub_page_class: str
+    next_page_class: str  # NOTE Maybe next_page_class should be on ScrapeConfig, also in general I need to think about which ones should be optional and handle that everywhere
 
 
 class Config(TypedDict):
