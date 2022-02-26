@@ -1,8 +1,6 @@
 from enum import Enum
 from typing import TypedDict
 
-# NOTE Should this package be some kind of Model package instead?
-
 
 class JobParameters(TypedDict):
     test_run: bool

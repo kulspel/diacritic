@@ -1,11 +1,10 @@
 from dataclasses import dataclass
-from functools import partial
-from typing import Callable, List
+from typing import List
 
 from bs4 import BeautifulSoup
+from accent.model.scrape_config import SquidScrapeConfig
 from data_layer.data_layer import appendDataLayerIdentifier
 from id_service.id_service import Id
-from scrape_config.scrape_config import SquidScrapeConfig
 
 from scraper.scraper import Scraper
 

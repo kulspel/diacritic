@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any
 
-from data_layer.metadata import Metadata, ScrapeMetadata
+from model.metadata import Metadata, ScrapeMetadata
 
 # TODO This one needs to be abstracted to it's own package separate from the scraper, since it will be needed in several places
 
