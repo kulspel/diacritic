@@ -1,5 +1,5 @@
 beautifulsoup4
-mergedeep
 
 --index-url https://test.pypi.org/simple/
 accent-kulspel
+circumflex-kulspel

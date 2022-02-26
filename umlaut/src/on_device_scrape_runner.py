@@ -6,12 +6,13 @@ from data_layer.data_layer import DataLayer
 from data_layer.local_file_system_data_layer import LocalFileSystem
 from id_service.data_layer_id_service import DataLayerIdService
 from id_service.id_service import Id, IdService
-from scrape_config.scrape_config import Config, ScrapeType, SquidScrapeConfig
+from model.scrape_config import Config, ScrapeType, SquidScrapeConfig
 from scrape_runner import ScrapeRunner
 from scraper.squid_scraper import SquidScraper
 
 
 class OnDeviceScrapeRunner(ScrapeRunner):
+    # TODO implement event/listener design pattern
 
     # @staticmethod
     # def get_matching_scrape_id(data_layer: DataLayer, config: Config) -> Id:

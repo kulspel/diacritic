@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, List
 
 from model.metadata import Metadata, ScrapeMetadata
 
@@ -11,7 +11,7 @@ from model.metadata import Metadata, ScrapeMetadata
 DataLayerIdentifier = str
 
 
-def toDataLayerIdentifier(strings: list[str]) -> DataLayerIdentifier:
+def toDataLayerIdentifier(strings: List[str]) -> DataLayerIdentifier:
     return "::".join(map(lambda x: x.upper(), strings))
 
 

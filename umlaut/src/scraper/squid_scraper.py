@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List
 
 from bs4 import BeautifulSoup
-from accent.model.scrape_config import SquidScrapeConfig
+from model.scrape_config import SquidScrapeConfig
 from data_layer.data_layer import appendDataLayerIdentifier
 from id_service.id_service import Id
 
@@ -19,10 +19,10 @@ class Page:
 
 @dataclass(frozen=True)
 # NOTE This is no longer really a squidscraper really I guess, it's more how we do the next stuff
+# TODO rename this to better reflect the scrape strategy
 class SquidScraper(Scraper[SquidScrapeConfig]):
 
     # TODO __find_links,__extract_sub_pages should be the responsibility of Macron (extractor)
-    # TODO change all list in type signature to List
     def __extract_urls(self, html_class_to_extract: str, soup: BeautifulSoup) -> List[str]:
         page_link_elements = soup.find_all(
             "a",
@@ -37,6 +37,7 @@ class SquidScraper(Scraper[SquidScrapeConfig]):
 
     # HACK ugly mutable stuff
     # NOTE this could pretty easily be done recursively
+    # TODO Refactor this
     def scrape_origin_pages(self, origin_page_url: str) -> List[Page]:
 
         origin_page = Page(self.scrape_url(origin_page_url), origin_page_url)

@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from data_layer.data_layer import (DataLayer, DataLayerIdentifier,
                                    toDataLayerIdentifier)
 from id_service.id_service import Id, IdService
-from scrape_config.scrape_config import ScrapeConfig
+from model.scrape_config import ScrapeConfig
 
 # HACK the only reason these imports  work is because we run scrape_runner.py which I guess brings these packages into scope somehow
 

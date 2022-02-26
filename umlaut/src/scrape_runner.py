@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from data_layer.data_layer import DataLayer
-from scrape_config.scrape_config import Config
+from model.scrape_config import Config
 from id_service.id_service import Id, IdService
 
 

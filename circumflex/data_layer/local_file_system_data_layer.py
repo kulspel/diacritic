@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from mergedeep import merge  # type: ignore
 
 from data_layer.data_layer import DataLayer, DataLayerIdentifier
-from data_layer.metadata import Metadata, ScrapeMetadata
+from model.metadata import Metadata, ScrapeMetadata
 
 
 class LocalFileSystem(DataLayer):
